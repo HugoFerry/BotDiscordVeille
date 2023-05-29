@@ -1,26 +1,26 @@
 const Discord = require('discord.js');
+const {Client, GatewayIntentBits} = require('discord.js')
+const {MessageAttachment} = require('discord.js');
 const fs = require('fs');
 
-const client = new Discord.Client();
-const TOKEN = 'YOUR_DISCORD_BOT_TOKEN';
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+    ]
+});
+const TOKEN = 'MTExMjczNDY0ODkzODc5NTA3MA.GeETdu.QVbrgpz0KwEKHKO5Ry3DvHZ_raft_8bkUpUH_o';
 
 client.on('ready', async () => {
     console.log('Bot connected to Discord!');
 
-    // Chemin vers le fichier CSV
-    const csvPath = "H:\\Bot Discord\\csv\\VeilleCSV.csv";
+    const channelID = '1046780829067661388';
 
-    // Lire le fichier en tant que flux binaire
-    const csvData = fs.readFileSync(csvPath);
+    const channel = client.channels.fetch(channelID);
 
-    // Créer un objet discord.MessageAttachment avec le contenu du fichier
-    const csvAttachment = new Discord.MessageAttachment(csvData, 'FrigoVeilleNews.csv');
+    const messageWithCSV = await client.channels.cache.get('1046780829067661388').send( {content:'Bonjour à tous ! Voici le nouveau CSV sur notre veille 😊.',
+        files: ["csv/VeilleCSV.csv"]
+    })
 
-    // Créer un message contenant la pièce jointe
-    const messageContent = 'Bonjour à tous ! Voici le nouveau CSV sur notre veille 😊. \n';
-    const messageWithCSV = await message.channel.send(messageContent, csvAttachment);
-
-    // Ajouter une réaction au message pour indiquer la fin de l'envoi
     await messageWithCSV.react('✅');
 });
 
